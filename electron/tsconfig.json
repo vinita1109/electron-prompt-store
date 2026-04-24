@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "../dist-electron",
+    "rootDir": "..",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": false,
+    "removeComments": false,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
+    "lib": ["ES2022"],
+    "baseUrl": "..",
+    "paths": {
+      "@/shared/*": ["./shared/*"]
+    }
+  },
+  "include": ["./**/*.ts", "../shared/**/*.ts"],
+  "exclude": ["../node_modules", "../dist", "../dist-electron", "../out", "../app", "../.next"]
+}

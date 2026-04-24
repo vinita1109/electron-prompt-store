@@ -1,0 +1,92 @@
+{
+  "name": "prompt-library",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Developer-focused desktop prompt library with full file-system access, built on Next.js + Electron + better-sqlite3.",
+  "author": "Vinni",
+  "main": "dist-electron/electron/main.js",
+  "scripts": {
+    "dev:next": "next dev -p 3000",
+    "watch:electron": "tsc -p electron/tsconfig.json --watch --preserveWatchOutput",
+    "dev:electron": "wait-on tcp:3000 file:./dist-electron/electron/main.js && cross-env IS_DEV=true electron .",
+    "dev": "concurrently -k -n NEXT,TSC,APP -c blue,yellow,magenta \"npm run dev:next\" \"npm run watch:electron\" \"npm run dev:electron\"",
+    "build:next": "next build",
+    "build:electron": "tsc -p electron/tsconfig.json",
+    "build": "npm run build:next && npm run build:electron",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "postinstall": "electron-rebuild -f -w better-sqlite3 || echo \"electron-rebuild failed — run 'npm run rebuild' manually\"",
+    "package:mac": "npm run build && electron-builder --mac --x64 --arm64",
+    "package:win": "npm run build && electron-builder --win --x64",
+    "package:all": "npm run build && electron-builder --mac --x64 --arm64 --win --x64",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "better-sqlite3": "11.3.0",
+    "electron-store": "8.2.0",
+    "gray-matter": "4.0.3",
+    "lucide-react": "0.453.0",
+    "next": "14.2.15",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "3.7.1",
+    "@types/better-sqlite3": "7.6.11",
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.20",
+    "concurrently": "9.0.1",
+    "cross-env": "7.0.3",
+    "electron": "32.2.7",
+    "electron-builder": "25.1.8",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.13",
+    "typescript": "5.6.2",
+    "wait-on": "8.0.1"
+  },
+  "build": {
+    "appId": "com.vinni.prompt-library",
+    "productName": "Prompt Library",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
+    "files": [
+      "dist-electron/**/*",
+      "out/**/*",
+      "package.json",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples,*.d.ts}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "mac": {
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ],
+      "category": "public.app-category.developer-tools",
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "writeUpdateInfo": false
+    },
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true
+    }
+  }
+}
